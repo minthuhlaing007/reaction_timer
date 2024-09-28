@@ -1,22 +1,45 @@
 <template>
-  <div class="block">
-    Click {{ delay }}
-  </div>
+  <div class="block" v-if="showBlock" @click="stopTimer">Click {{ delay }}</div>
 </template>
 
 <script>
 export default {
-props:["delay"],
-}
+  props: ["delay"],
+  data() {
+    return {
+      showBlock: false,
+      score: 0,
+      timer:null,
+    };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.showBlock = true;
+      this.startTimer();
+    }, this.delay);
+  },
+  methods:{
+    startTimer(){
+      this.timer=setInterval(()=>{
+        this.score += 50;
+      },50);
+    },
+    stopTimer(){
+      clearInterval(this.timer);
+      // console.log(this.score);
+      this.$emit("endGame" ,this.score);
+    }
+  }
+};
 </script>
 
 <style>
-.block{
+.block {
   width: 300px;
   height: 300px;
   padding: 20px;
   margin: 50px auto;
   background: #2c3e50;
-  color:white
+  color: white;
 }
 </style>
